@@ -16,8 +16,6 @@ import {
   TemplateRef,
   ViewContainerRef,
   ApplicationRef,
-  OnChanges,
-  SimpleChanges
 } from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {DOCUMENT} from '@angular/common';
@@ -74,7 +72,7 @@ let nextWindowId = 0;
   providers: [{provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => NgbTypeahead), multi: true}]
 })
 export class NgbTypeahead implements ControlValueAccessor,
-    OnInit, OnChanges, OnDestroy {
+    OnInit, OnDestroy {
   private _popupService: PopupService<NgbTypeaheadWindow>;
   private _subscription: Subscription | null = null;
   private _closed$ = new Subject<void>();
@@ -211,13 +209,6 @@ export class NgbTypeahead implements ControlValueAccessor,
   }
 
   ngOnInit(): void { this._subscribeToUserInput(); }
-
-  ngOnChanges({ngbTypeahead}: SimpleChanges): void {
-    if (ngbTypeahead && !ngbTypeahead.firstChange) {
-      this._unsubscribeFromUserInput();
-      this._subscribeToUserInput();
-    }
-  }
 
   ngOnDestroy(): void {
     this._closePopup();
